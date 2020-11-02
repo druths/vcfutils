@@ -20,7 +20,13 @@ def export_csv(parser, context, args):
         if args.emails_required and len(vcf['email_addresses']) == 0:
             continue
 
-        fh.write(f'{vcf.get("first_name","")},{vcf.get("last_name","")},{",".join(vcf["email_addresses"].values())}')
+        first_name = vcf.get('first_name', '')
+        last_name = vcf.get('last_name', '')
+
+        if len(last_name) == 0 and ' ' in first_name:
+            first_name, last_name = first_name.split(maxsplit=1)
+
+        fh.write(f'{first_name},{last_name},{",".join(vcf["email_addresses"].values())}')
         fh.write('\n')
 
 
